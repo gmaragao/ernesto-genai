@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ernesto, seu consultor honesto.</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 500px;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .chat-header {
+            background: #0078d4;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .chat-messages {
+            height: 50vh;
+            overflow-y: auto;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        .chat-input button {
+            padding: 10px;
+            border: none;
+            background: #0078d4;
+            border-radius: 4px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .chat-input button:hover {
+            background: #005bb5;
+        }
+        .user-message {
+            text-align: right;
+            margin-bottom: 10px;
+            color: #0078d4;
+        }
+        .bot-message {
+            text-align: left;
+            margin-bottom: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Ernesto, seu consultor honesto</div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Digite sua mensagem...">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (!userInput.trim()) return;
+
+            const chatMessages = document.getElementById('chat-messages');
+
+            // Display user message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.textContent = userInput;
+            userMessageDiv.className = 'user-message';
+            chatMessages.appendChild(userMessageDiv);
+
+            // Get bot response
+            try {
+                const response = await getChatResponse(userInput);
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.textContent = response;
+                botMessageDiv.className = 'bot-message';
+                chatMessages.appendChild(botMessageDiv);
+            } catch (error) {
+                console.error('Error:', error);
+                const errorDiv = document.createElement('div');
+                errorDiv.textContent = 'Desculpe, ocorreu um erro ao processar sua solicitação.';
+                errorDiv.className = 'bot-message';
+                chatMessages.appendChild(errorDiv);
+            }
+
+            // Clear input and scroll
+            document.getElementById('user-input').value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function getChatResponse(userInput) {
+            const endpoint = "https://literate-space-adventure-rr5rvp65vx92xx4v-3000.app.github.dev/api/chat"; // Ensure this matches your server's URL and port
+
+            const messages = [
+                {
+                    role: "system",
+                    content: "You are Ernesto, a Portuguese tax consultant, your goal is to help your customer fulfill their IRS document properly. You must speak portuguese. Do not answer non related IRS questions, politely refuse and explain you are not supposed to answer these kind of questions! Ask as many questions as needed to the customer in order to get the most important data from them. Make it a conversation until you are sure that the customer fulfilled every requirement of a proper IRS document, but do not answer non-IRS related questions. Do a fact check regarding the customer input. Make sure they are talking the truth and validate the input. Use your knowledge base to know what is needed to fulfill the document correctly. In the first step ask all the information required to fulfill all the requirements for filling the IRS document in Portugal.",
+                },
+                {
+                    role: "user",
+                    content: userInput,
+                },
+            ];
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ messages }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.content;
+        }
+    </script>
+</body>
+</html>
