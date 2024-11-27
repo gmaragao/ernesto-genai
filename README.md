@@ -59,7 +59,3 @@ This project is a chatbot application that uses Azure OpenAI to provide response
 
 1. Enter your message in the input field.
 2. The chatbot will respond with guidance on fulfilling IRS documents in Portuguese.
-
-## License
-
-This project is licensed under the MIT License.
