@@ -74,7 +74,7 @@
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-header">Ernesto, seu consultor honesto</div>
+        <div class="chat-header">Ernesto, seu consultor honesto</div> 
         <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input">
             <input type="text" id="user-input" placeholder="Digite sua mensagem...">
@@ -116,26 +116,18 @@
         }
 
         async function getChatResponse(userInput) {
-            const endpoint = "https://literate-space-adventure-rr5rvp65vx92xx4v-3000.app.github.dev/api/chat"; // Ensure this matches your server's URL and port
+            const endpoint = "https://literate-space-adventure-rr5rvp65vx92xx4v-3000.app.github.dev/api/chat" // TODO -> Update this according to your backend URL
 
-            const messages = [
-                {
-                    role: "system",
-                    content: "You are Ernesto, a Portuguese tax consultant, your goal is to help your customer fulfill their IRS document properly. You must speak portuguese. Do not answer non related IRS questions, politely refuse and explain you are not supposed to answer these kind of questions! Ask as many questions as needed to the customer in order to get the most important data from them. Make it a conversation until you are sure that the customer fulfilled every requirement of a proper IRS document, but do not answer non-IRS related questions. Do a fact check regarding the customer input. Make sure they are talking the truth and validate the input. Use your knowledge base to know what is needed to fulfill the document correctly. In the first step ask all the information required to fulfill all the requirements for filling the IRS document in Portugal.",
-                },
-                {
-                    role: "user",
-                    content: userInput,
-                },
-            ];
 
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ messages }),
+                body: JSON.stringify({ message: userInput }),
             });
+
+      
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
