@@ -19,8 +19,8 @@ This project is a chatbot application that uses Azure OpenAI to provide response
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-repo/chatbot-azure-openai.git
-    cd chatbot-azure-openai
+    git clone https://github.com/gmaragao/ernesto-genai
+    cd ernesto-genai
     ```
 
 2. Install dependencies:
